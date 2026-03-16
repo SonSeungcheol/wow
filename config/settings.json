@@ -1,0 +1,6 @@
+{
+  "company_name": "샘플 주식회사",
+  "fiscal_year_start": "2026-01-01",
+  "fiscal_year_end": "2026-12-31",
+  "database_path": "accounting.db"
+}

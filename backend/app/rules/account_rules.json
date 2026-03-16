@@ -1,0 +1,7 @@
+[
+  {"version":"v1","effective_from":"2026-01-01","keywords":["광고","메타","인스타","네이버광고","쿠팡광고"],"debit":"광고선전비","credit_default":"보통예금","explanation":"광고 키워드 기반 비용 인식","review_points":["광고매체 증빙 확인"],"confidence":0.9},
+  {"version":"v1","effective_from":"2026-01-01","keywords":["택배","배송","운송"],"debit":"운반비","credit_default":"보통예금","explanation":"운송/배송 관련 비용 인식","review_points":["판매부대비용 여부 확인"],"confidence":0.85},
+  {"version":"v1","effective_from":"2026-01-01","keywords":["세무","법무","수수료","PG","플랫폼"],"debit":"지급수수료","credit_default":"보통예금","explanation":"용역/플랫폼 수수료 인식","review_points":["용역기간 및 계산서 확인"],"confidence":0.88},
+  {"version":"v1","effective_from":"2026-01-01","keywords":["원료","부자재","포장재","용기"],"debit":"원재료","credit_default":"보통예금","explanation":"재고/소모성 재료 지출","review_points":["재고자산 분류 적정성 확인"],"confidence":0.8},
+  {"version":"v1","effective_from":"2026-01-01","keywords":["대표","개인카드","대납"],"debit":"복리후생비","credit_default":"가수금","explanation":"대표자 대납 인식","review_points":["상환 계획 및 자금거래 증빙 확인"],"confidence":0.75}
+]
