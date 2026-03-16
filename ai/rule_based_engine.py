@@ -33,7 +33,7 @@ class RuleBasedJournalEngine(BaseJournalEngine):
 
         return {
             "debit_account": "검토필요",
-            "credit_account": "보통예금" if payment_method != "외상" else "미지급금",
+            "credit_account": "미지급금" if payment_method in ("외상", "미지급") else "보통예금",
             "amount": float(transaction["amount"]),
             "explanation": "일치하는 규칙이 없어 수동 검토가 필요합니다.",
             "review_points": "거래 성격 확인 후 계정과목 수동 지정",
