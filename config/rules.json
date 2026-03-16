@@ -1,0 +1,42 @@
+[
+  {
+    "name": "광고비 규칙",
+    "keywords": ["광고", "메타", "인스타", "쿠팡광고", "네이버광고"],
+    "debit_account": "광고선전비",
+    "credit_account": "보통예금",
+    "confidence": 0.9,
+    "review_points": ["실제 광고 집행 건인지 확인", "세금계산서 수취 여부 확인"]
+  },
+  {
+    "name": "배송비 규칙",
+    "keywords": ["택배", "배송", "운송"],
+    "debit_account": "운반비",
+    "credit_account": "보통예금",
+    "confidence": 0.85,
+    "review_points": ["판매 관련 운송비인지 확인"]
+  },
+  {
+    "name": "원재료 규칙",
+    "keywords": ["원료", "부자재", "용기", "포장재"],
+    "debit_account": "원재료",
+    "credit_account": "보통예금",
+    "confidence": 0.8,
+    "review_points": ["재고자산 계상 대상인지 검토"]
+  },
+  {
+    "name": "수수료 규칙",
+    "keywords": ["세무", "법무", "수수료", "플랫폼 수수료"],
+    "debit_account": "지급수수료",
+    "credit_account": "보통예금",
+    "confidence": 0.9,
+    "review_points": ["용역 제공기간 및 증빙 확인"]
+  },
+  {
+    "name": "대표 대납 규칙",
+    "keywords": ["대표 대납", "개인카드", "대표님"],
+    "debit_account": "지급수수료",
+    "credit_account": "가수금",
+    "confidence": 0.75,
+    "review_points": ["실제 대표 개인자금 대납인지 확인", "상환 계획 확인"]
+  }
+]
