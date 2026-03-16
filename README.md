@@ -1,100 +1,73 @@
-# 한국 소규모 법인 회계·결산·법인세 신고 보조 웹앱
+# 소규모 한국 법인용 복식부기 회계 보조 MVP
 
-본 프로젝트는 거래 입력부터 결산/세무조정/신고보조서류 Excel 생성까지 지원하는 FastAPI + React 기반 실사용형 1차 완성본입니다.
+사람이 입력한 거래내역을 기반으로 규칙 기반 분개를 제안하고, 승인된 분개로 분개장/총계정원장/시산표/손익계산서/재무상태표를 자동 생성하는 Streamlit 앱입니다.
 
-## 1. 전체 설계 요약
-- **엔진 분리**
-  - 회계 엔진: 거래→분개 제안/승인/장부 생성
-  - 결산 엔진: 결산조정 입력→결산분개 반영
-  - 세무조정 엔진: 조정 입력/집계
-  - 출력 엔진: 법인세 신고 보조 패키지 Excel 생성
-- **규칙 분리**: `backend/app/rules/*.json` (버전 파일 포함)
-- **DB 전략**: PostgreSQL 기본, SQLite 개발 허용
-- **보안**: 관리자 로그인 + bcrypt 해시 + JWT
+## 주요 기능
+- 거래 입력 (거래일자, 거래처, 적요, 금액, 결제수단, 부가세 포함 여부, 메모)
+- 규칙 기반 분개 제안 (차변/대변 계정, 설명, 체크포인트, 검토 필요 상태)
+- 분개 수정 및 승인 후 SQLite 저장
+- 회계 산출물 조회
+  - 분개장
+  - 총계정원장
+  - 시산표
+  - 손익계산서
+  - 재무상태표
+- Excel 다운로드
+- 설정 파일 기반 관리
+  - 회사 정보(`config/settings.json`)
+  - 계정과목(`config/accounts.json`)
+  - 분개 규칙(`config/rules.json`)
 
-## 2. 폴더 구조
+## 폴더 구조
 ```
-backend/
-  app/
-    api/
-    core/
-    db/
-    models/
-    schemas/
-    services/
-    rules/
-    tests/
-  alembic/
-frontend/
-docker-compose.yml
-.env.example
-README.md
+project_root/
+  app.py
+  requirements.txt
+  README.md
+  config/
+    accounts.json
+    rules.json
+    settings.json
+  core/
+    db.py
+    models.py
+    journal.py
+    ledger.py
+    statements.py
+    validators.py
+  ai/
+    ai_engine.py
+    rule_based_engine.py
+    openai_engine.py
+  exports/
+    excel_exporter.py
+  tests/
+    test_journal.py
+    test_statements.py
 ```
 
-## 3. 데이터 모델
-- users, roles
-- companies, fiscal_years, accounts
-- transactions, journal_entries, journal_entry_lines
-- closing_entries, closing_entry_lines
-- tax_adjustments, tax_adjustment_lines
-- export_jobs, audit_logs
-- 공통 필드: created_at, updated_at, created_by
-
-## 4. 회계 흐름
-거래 입력 → 규칙 기반 분개 제안 → 사용자 승인 → 승인분개만 장부 반영 → 결산조정 반영 → 재무제표 생성(손익/재무상태/이익잉여금처분/현금흐름) → 세무조정 집계 → 신고용 Excel 출력
-
-## 5. 주요 API
-- 인증: `POST /api/auth/login`
-- 대시보드: `GET /api/dashboard`
-- 회사/회계기간/계정: `POST/GET /api/companies`, `POST/GET /api/fiscal-years`, `POST/GET /api/accounts`
-- 거래/분개: `POST/GET /api/transactions`, `GET /api/journals/review`, `POST /api/journals/approve`
-- 장부: `GET /api/ledgers/journal`, `GET /api/ledgers/general-ledger`, `GET /api/ledgers/trial-balance`
-- 결산: `POST/GET /api/closing-entries`
-- 재무제표: `GET /api/statements`
-- 세무조정: `POST/GET /api/tax-adjustments`, `GET /api/tax-adjustments/summary`
-- 규칙/감사로그: `GET /api/rules`, `GET /api/audit-logs`
-- 출력: `GET /api/exports/excel`
-
-## 6. 규칙 버전 관리
-- `backend/app/rules/account_rules.json`
-- `backend/app/rules/tax_rules.json`
-- `backend/app/rules/vat_rules.json`
-- `backend/app/rules/account_rules_v1.json`
-- `backend/app/rules/tax_rules_v1.json`
-- `backend/app/rules/vat_rules_v1.json`
-
-## 7. 실행 방법
-### Docker (권장)
+## 설치 및 실행
 ```bash
-docker-compose up --build
-```
-- Backend Swagger: http://localhost:8000/docs
-- Frontend: http://localhost:5173
-
-### 로컬(개발)
-```bash
-cd backend
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\\Scripts\\activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload
-
-cd ../frontend
-npm install
-npm run dev
+streamlit run app.py
 ```
 
-기본 관리자 계정(자동 생성):
-- `admin / admin1234`
-
-## 8. 테스트 방법
+## 테스트
 ```bash
-cd backend
 pytest -q
 ```
 
-테스트 범위:
-- 분개 밸런스/승인
-- 시산표/손익/재무상태표
-- 결산분개
-- 세무조정 집계
-- export bytes 생성
-- API(헬스/거래 입력)
+## 샘플 거래 입력 예시 (5개)
+아래 키워드를 사용하면 규칙 기반 분개 제안이 동작합니다.
+1. 거래처: 메타, 적요: 인스타 광고비
+2. 거래처: CJ대한통운, 적요: 택배 배송비
+3. 거래처: 포장나라, 적요: 포장재 구매
+4. 거래처: 세무법인OO, 적요: 기장 수수료
+5. 거래처: 대표님, 적요: 대표 대납 카드결제
+
+## 주의사항
+- 본 프로젝트는 한국 회계 실무 보조용 MVP입니다.
+- 세무 신고 자동 제출 기능은 포함하지 않습니다.
+- AI 분개 제안은 반드시 사람이 검토/승인해야 합니다.
