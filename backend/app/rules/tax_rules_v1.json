@@ -1,0 +1,4 @@
+[
+  {"version":"v1","effective_from":"2026-01-01","name":"접대비 한도초과","category":"손금불산입","reserve_type":"유보"},
+  {"version":"v1","effective_from":"2026-01-01","name":"감가상각 한도초과","category":"손금불산입","reserve_type":"유보"}
+]

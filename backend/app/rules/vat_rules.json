@@ -1,0 +1,5 @@
+[
+  {"version":"v1","effective_from":"2026-01-01","evidence":"세금계산서","vat_deductible":true},
+  {"version":"v1","effective_from":"2026-01-01","evidence":"카드전표","vat_deductible":true},
+  {"version":"v1","effective_from":"2026-01-01","evidence":"간이영수증","vat_deductible":false}
+]
