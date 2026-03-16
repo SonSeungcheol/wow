@@ -28,3 +28,18 @@ def test_unknown_keyword_returns_review_needed():
     result = engine.suggest(tx)
     assert result["debit_account"] == "검토필요"
     assert result["status"] == "review_needed"
+
+
+def test_unknown_keyword_with_unpaid_method_maps_to_accounts_payable():
+    engine = RuleBasedJournalEngine("config/rules.json")
+    tx = {
+        "vendor": "무명업체",
+        "description": "기타잡비",
+        "memo": "",
+        "amount": 10000,
+        "payment_method": "미지급",
+    }
+    result = engine.suggest(tx)
+    assert result["debit_account"] == "검토필요"
+    assert result["credit_account"] == "미지급금"
+    assert result["status"] == "review_needed"
